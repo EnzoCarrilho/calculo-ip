@@ -5,6 +5,7 @@ public class Ip {
 	private String mascara;
 	private String ip;
 	private String classe;
+	
 
 	public String getMascara() {
 		return mascara;
@@ -22,10 +23,21 @@ public class Ip {
 	}
 	
 	
+	String[] octetos = ip.split(".");
+	
+	String primeiroOcteto = octetos[0];
+	String segundoOcteto = octetos[1];
+	String terceiroOcteto = octetos[2];
+	String quartoOcteto = octetos[3].substring(0, 3);
+	
+	String[] barraCidr = ip.split("/");
+	int cidr = Integer.parseInt(barraCidr[1]);
+	
+	
 	private void definirClasse(){
 		
-		String primeiroocteto = ip.substring(0, 3);
-		int octetoint = Integer.parseInt(primeiroocteto);
+		String primeiroOcteto = ip.substring(0, 3);
+		int octetoint = Integer.parseInt(primeiroOcteto);
 		
 		if( octetoint <= 197) {
 			
@@ -43,28 +55,37 @@ public class Ip {
 		
 	}
 	
+	
 	private void definirMascara() {
 		
-	String[] cidr = ip.split("/");
+		String[] mascaraBinario = new String[4];
+		mascaraBinario[0] = "";
+		mascaraBinario[1] = "";
 		
-		if(cidr.length == 2) {
-			String valorcidr = cidr[1];
+		int divisaoCidr = cidr/8;
 		
-	
-			if(valorcidr == "8") {
-				
-				mascara = "255.0.0.0";
-				
-			}else if(valorcidr == "16") {
-				
-				mascara = "255.255.0.0";
-			
-			}else if(valorcidr == "24"){
-				
-				mascara = "255.255.255.0";
-			}
+		if(divisaoCidr == 1) {
+			mascara = "255.0.0.0";
+		}else if(divisaoCidr == 2) {
+			mascara = "255.255.0.0";	
+		}else if(divisaoCidr == 3) {
+			mascara = "255.255.255.0";
+		}else if(divisaoCidr == 4) {
+			mascara = "255.255.255.255";
 		}
+		
+		
+		if(divisaoCidr % 8 != 0) {
+			
+			
+			
+		}
+		
+			
 	}
+		
+		
+
 	
 	public void mostrarDados() {
 		
@@ -76,8 +97,6 @@ public class Ip {
 	
 	}
 	
-	
-			
 			
 		
 }
