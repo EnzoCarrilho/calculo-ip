@@ -1,18 +1,35 @@
 package br.com.sp.senai.ipinfo.model;
 
 public class Ip {
-
-	private String mascara;
-	private String ip;
+	
+	private String endereco;
+	private String mascaraDecimal;
+	private String mascaraBinario;
 	private String classe;
 	
-
-	public String getMascara() {
-		return mascara;
+	
+	public String getEndereco() {
+		return endereco;
 	}
 	
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+	
+	public String getMascaraDecimal() {
+		return mascaraDecimal;
+	}
+	
+	public void setMascaraDecimal(String mascaraDecimal) {
+		this.mascaraDecimal = mascaraDecimal;
+	}
+	
+	public String getMascaraBinario() {
+		return mascaraBinario;
+	}
+	
+	public void setMascaraBinario(String mascaraBinario) {
+		this.mascaraBinario = mascaraBinario;
 	}
 	
 	public String getClasse() {
@@ -23,77 +40,70 @@ public class Ip {
 	}
 	
 	
-	String[] octetos = ip.split(".");
-	
-	String primeiroOcteto = octetos[0];
-	String segundoOcteto = octetos[1];
-	String terceiroOcteto = octetos[2];
-	String quartoOcteto = octetos[3].substring(0, 3);
-	
-	String[] barraCidr = ip.split("/");
-	int cidr = Integer.parseInt(barraCidr[1]);
-	
 	
 	private void definirClasse(){
 		
-		String primeiroOcteto = ip.substring(0, 3);
-		int octetoint = Integer.parseInt(primeiroOcteto);
 		
-		if( octetoint <= 197) {
+		String primeiroOcteto = endereco.substring(0, 3);
+		int primeiroOctetoint = Integer.parseInt(primeiroOcteto);
+		
+		if( primeiroOctetoint  <= 127) {
 			
 			setClasse("A");
 			
-		}else if(octetoint > 128 && octetoint <= 192){
+		}else if(primeiroOctetoint  > 127 && primeiroOctetoint <= 191){
 			
 			setClasse("B");
 			
-		}else{
-			
+		}else if(primeiroOctetoint > 191 && primeiroOctetoint  <= 223){
+		
 			setClasse("C");
 			
+		}else if(primeiroOctetoint  > 223 && primeiroOctetoint <= 239) {
+			
+			setClasse("D");
+		}else {
+			
+			setClasse("E");
 		}
 		
 	}
 	
 	
 	private void definirMascara() {
+	
 		
-		String[] mascaraBinario = new String[4];
-		mascaraBinario[0] = "";
-		mascaraBinario[1] = "";
+		String[] separador = endereco.split("/");
+		int cidr = Integer.parseInt(separador[1]);
 		
-		int divisaoCidr = cidr/8;
+		mascaraBinario = "00000000000000000000000000000000";
 		
-		if(divisaoCidr == 1) {
-			mascara = "255.0.0.0";
-		}else if(divisaoCidr == 2) {
-			mascara = "255.255.0.0";	
-		}else if(divisaoCidr == 3) {
-			mascara = "255.255.255.0";
-		}else if(divisaoCidr == 4) {
-			mascara = "255.255.255.255";
+		int contadorindex = 0;
+		
+		while(cidr > 0) {
+			
+			mascaraBinario.replace(mascaraBinario.charAt(contadorindex), (char) 1);
+			
+			--cidr;
+			++contadorindex;
+			
+			setMascaraBinario(mascaraBinario);
+
 		}
+			
 		
-		
-		if(divisaoCidr % 8 != 0) {
-			
-			
-			
-		}
-		
-			
 	}
 		
 		
 
-	
 	public void mostrarDados() {
 		
 		definirClasse();
 		definirMascara();
 		
 		System.out.println("Classe: " + classe);
-		System.out.println("Mascara: " + mascara);
+		System.out.println("Mascara em Binário: " + mascaraBinario);
+		System.out.println();
 	
 	}
 	

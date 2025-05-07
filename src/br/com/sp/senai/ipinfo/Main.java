@@ -9,10 +9,11 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Scanner reader = new Scanner(System.in);
+		
 		Ip ip = new Ip();
 		
 		System.out.println("Insira o ip");
-		ip.setIp(reader.next());
+		ip.setEndereco(reader.next());
 		ip.mostrarDados();
 		
 		
