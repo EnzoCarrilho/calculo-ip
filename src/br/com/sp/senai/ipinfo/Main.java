@@ -11,13 +11,12 @@ public class Main {
 		Scanner reader = new Scanner(System.in);
 		
 		Ip ip = new Ip();
-		
 		System.out.println("Insira o ip");
-		ip.setEndereco(reader.next());
-		ip.mostrarDados();
 		
-		
-		reader.close();
+		 ip.setEndereco(reader.next());
+		 ip.mostrarDados();
+	
+		reader.close(); 
 	}
 
 }
