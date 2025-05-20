@@ -2,7 +2,6 @@ package br.com.sp.senai.ipinfo.model;
 
 import java.util.HashMap;
 
-import com.sun.javafx.collections.MappingChange.Map;
 
 public class Ip {
 	
@@ -10,6 +9,7 @@ public class Ip {
 	private String mascaraDecimal;
 	private String mascaraBinario;
 	private String classe;
+	private int cidr;
 	
 	
 	public String getEndereco() {
@@ -44,8 +44,7 @@ public class Ip {
 	}
 	
 	
-	
-	private void definirClasse(){
+	private String definirClasse(){
 		
 		String inicioEndereco = endereco.substring(0, 3);
 		int inicioEnderecoint = Integer.parseInt(inicioEndereco);
@@ -70,23 +69,24 @@ public class Ip {
 			setClasse("E");
 		}
 		
+		return classe;
 	}
 	
 	StringBuilder novaMascaraBinario = null;
 	
 	private void definirMascara() {
 	
-		// separando o cidr do endere�o ip
+		// separando o cidr do endere�o ip
 		String[] separador = endereco.split("/");
-		
+						
 		String stringcidr = separador[1];
-		int intcidr = Integer.parseInt(stringcidr);
-		
+		cidr = Integer.parseInt(stringcidr);
+				
 		// Criando um StringBuilder com 32 zeros
 		novaMascaraBinario = new StringBuilder("00000000000000000000000000000000");
 
 		// Preenchendo os bits com '1' de acordo com o valor do CIDR			
-		for (int i = 0; i < intcidr; i++) {
+		for (int i = 0; i < cidr; i++) {
 			novaMascaraBinario.setCharAt(i, '1');
 		}
 		
@@ -106,36 +106,59 @@ public class Ip {
 		
 	}
 	
+	
+	
+	private int definirSubRedes(){
+		
+		int bitsEmprestados = 0;
+		
+       if(classe == "A") {
+    	   
+    	   bitsEmprestados = cidr - 8;
+    	 
+       }else if(classe == "B") {
+    	
+    	   bitsEmprestados = cidr - 16;
+    	   
+       }else if(classe == "C") {
+    	   
+    	   bitsEmprestados = cidr - 24;
+    	   
+       }else if(classe == "D") {
+    	   
+    	   bitsEmprestados = cidr - 32;
+    	   
+       }
+       
+       if(bitsEmprestados == 0) {
+    	   
+    	   System.out.println("Não há subredes");
+       }
+       
+       int subRedes = (int) Math.pow(2, bitsEmprestados);
+       return subRedes;
+	}
+	
 	private int definirIpsDisponiveis() {
 		
 		int bitsZero = 0;
+		int ipsDisponiveis = 0;
 		
+		// Percorrendo a Mascara e, Binário
 		for(int i = 0; i < novaMascaraBinario.length(); i++) {
 			
+			// Contando os Bits zero
 			if(novaMascaraBinario.charAt(i) == '0' ) {
 				bitsZero ++;
 			}
 		}
 		
-		int ipsDisponiveis = (int) ((Math.pow(2, bitsZero)) - 2);
+		// Fórmula para hosts disponíveis
+		ipsDisponiveis = (int) ((Math.pow(2, bitsZero)) - 2);
 		
 		return ipsDisponiveis;
 	}
 	
-	private int definirSubRedes(){
-		
-       int bitsUm = 0;
-		
-		for(int i = 0; i < novaMascaraBinario.length(); i++) {
-			
-			if(novaMascaraBinario.charAt(i) == '1' ) {
-				bitsUm ++;
-			}
-		}
-		
-		int SubRedes = (int) Math.pow(2, bitsUm);
-		return SubRedes;
-	}
 
 	
 	
@@ -145,10 +168,12 @@ public class Ip {
 		definirMascara();
 		definirIpsDisponiveis();
 		
-		System.out.println("Classe: " + classe);
-		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
+		System.out.println("Classe: " + definirClasse());
+		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
 		System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		System.out.println("Ips host dispon�veis: " + definirIpsDisponiveis());
+		System.out.println("Número de Redes: " + definirSubRedes());
+		System.out.println("Ips host dispon�veis: " + definirIpsDisponiveis());
+		
 		System.out.println();
 	
 	}
