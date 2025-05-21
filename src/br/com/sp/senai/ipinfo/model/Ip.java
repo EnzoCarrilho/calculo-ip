@@ -112,21 +112,17 @@ public class Ip {
 		
 		int bitsEmprestados = 0;
 		
-       if(classe == "A") {
+       if(cidr > 8 && cidr < 16 ) {
     	   
     	   bitsEmprestados = cidr - 8;
     	 
-       }else if(classe == "B") {
+       }else if(cidr > 16 && cidr < 24) {
     	
     	   bitsEmprestados = cidr - 16;
     	   
-       }else if(classe == "C") {
+       }else{
     	   
     	   bitsEmprestados = cidr - 24;
-    	   
-       }else if(classe == "D") {
-    	   
-    	   bitsEmprestados = cidr - 32;
     	   
        }
        
@@ -152,11 +148,10 @@ public class Ip {
 				bitsZero ++;
 			}
 		}
-		
-		// Fórmula para hosts disponíveis
-		ipsDisponiveis = (int) ((Math.pow(2, bitsZero)) - 2);
-		
-		return ipsDisponiveis;
+	
+	    	ipsDisponiveis = (int) ((Math.pow(2, bitsZero)) - 2);
+	    
+	    	return ipsDisponiveis;
 	}
 	
 
