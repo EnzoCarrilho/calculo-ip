@@ -167,15 +167,11 @@ public class Ip {
 		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
 		System.out.println("Mascara em Decimal: " + mascaraDecimal);
 		System.out.println("Número de Redes: " + definirSubRedes());
-		System.out.println("Ips host dispon�veis: " + definirIpsDisponiveis());
+		System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
 		
 		System.out.println();
 	
 	}
 	
-			
-		
 }
-	
-	
 
