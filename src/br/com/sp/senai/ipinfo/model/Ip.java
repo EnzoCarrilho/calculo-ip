@@ -1,5 +1,6 @@
 package br.com.sp.senai.ipinfo.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -74,6 +75,7 @@ public class Ip {
 	
 	StringBuilder novaMascaraBinario = null;
 	
+	
 	private void definirMascara() {
 	
 		// separando o cidr do endere�o ip
@@ -107,10 +109,9 @@ public class Ip {
 	}
 	
 	
-	
+	int numeroDeRedes = 0;
+	int bitsEmprestados = 0;
 	private int definirSubRedes(){
-		
-		int bitsEmprestados = 0;
 		
        if(cidr > 8 && cidr < 16 ) {
     	   
@@ -126,14 +127,19 @@ public class Ip {
     	   
        }
        
+       
        if(bitsEmprestados == 0) {
     	   
     	   System.out.println("Não há subredes");
+    	   numeroDeRedes = 1;
+       }else {
+       
+       numeroDeRedes = (int) Math.pow(2, bitsEmprestados);
        }
        
-       int subRedes = (int) Math.pow(2, bitsEmprestados);
-       return subRedes;
+       return numeroDeRedes;
 	}
+	
 	
 	private int definirIpsDisponiveis() {
 		
@@ -148,14 +154,32 @@ public class Ip {
 				bitsZero ++;
 			}
 		}
-	
 	    	ipsDisponiveis = (int) ((Math.pow(2, bitsZero)) - 2);
 	    
 	    	return ipsDisponiveis;
 	}
 	
-
+	public Integer[] definirIpDasRedes(){
+		
+		int novoOctetoMascara = 255 + bitsEmprestados;
+		int saltoDeIps = novoOctetoMascara / numeroDeRedes;
+		int intervaloDeRedes;
+		
+		Integer[] intervalosDeRedes = new Integer[numeroDeRedes];
+		int i = 0;
+		
+		while(numeroDeRedes > i) {
+			
+			intervaloDeRedes = novoOctetoMascara - saltoDeIps;
+			intervalosDeRedes[i] = intervaloDeRedes;
+			i ++;
+		}
+		
+		return intervalosDeRedes;
+		
+	}
 	
+
 	
 	public void mostrarDados() {
 		
@@ -166,8 +190,9 @@ public class Ip {
 		System.out.println("Classe: " + definirClasse());
 		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
 		System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		System.out.println("Número de Redes: " + definirSubRedes());
+		System.out.println("n�mero De Redes: " + definirSubRedes());
 		System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
+		System.out.println("Intervalo de Ips de rede: " + definirIpDasRedes());
 		
 		System.out.println();
 	

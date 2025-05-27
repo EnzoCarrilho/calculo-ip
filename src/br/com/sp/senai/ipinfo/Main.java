@@ -9,14 +9,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		TelaCalculo tela= new TelaCalculo();
-		
-		tela.CriarTelaCalculo();
-		
 		Scanner reader = new Scanner(System.in);
 		
 		Ip ip = new Ip();
-		System.out.println("Insira o ip");
+		System.out.println("Insira o endereço ip");
 		
 		 ip.setEndereco(reader.next());
 		 ip.mostrarDados();
