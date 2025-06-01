@@ -1,6 +1,7 @@
 package br.com.sp.senai.ipinfo.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -111,7 +112,7 @@ public class Ip {
 	
 	int numeroDeRedes = 0;
 	int bitsEmprestados = 0;
-	private int definirSubRedes(){
+	private int calcularSubRedes(){
 		
        if(cidr > 8 && cidr < 16 ) {
     	   
@@ -126,7 +127,6 @@ public class Ip {
     	   bitsEmprestados = cidr - 24;
     	   
        }
-       
        
        if(bitsEmprestados == 0) {
     	   
@@ -159,25 +159,56 @@ public class Ip {
 	    	return ipsDisponiveis;
 	}
 	
-	public Integer[] definirIpDasRedes(){
+	int saltoDeIps = 0;
+	public Integer[] definirIpDeInicioDasRedes(){
 		
 		int novoOctetoMascara = 255 + bitsEmprestados;
 		int saltoDeIps = novoOctetoMascara / numeroDeRedes;
-		int intervaloDeRedes;
+		int enderecoDeInicioDasRedes = 0;
 		
-		Integer[] intervalosDeRedes = new Integer[numeroDeRedes];
-		int i = 0;
+		Integer[] intervalosDeInicioDasRedes = new Integer[numeroDeRedes];
 		
-		while(numeroDeRedes > i) {
-			
-			intervaloDeRedes = novoOctetoMascara - saltoDeIps;
-			intervalosDeRedes[i] = intervaloDeRedes;
-			i ++;
-		}
+		for (int i = 0; i < numeroDeRedes; i++) {
+	        intervalosDeInicioDasRedes[i] = enderecoDeInicioDasRedes;
+	        enderecoDeInicioDasRedes += saltoDeIps; // Incrementa para a próxima interação
+	    }
 		
-		return intervalosDeRedes;
-		
+		return intervalosDeInicioDasRedes;
 	}
+	
+	
+	private Integer[] definirPrimeiroIpValido() {
+		
+		Integer[] intervaloDePrimeirosIpsValidos = new Integer[numeroDeRedes];
+				
+		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
+			intervaloDePrimeirosIpsValidos[i] = definirIpDeInicioDasRedes()[i]+1;
+		}
+		return intervaloDePrimeirosIpsValidos;
+	}
+	
+	
+	private Integer[] definirUltimoIpValido() {
+		
+		Integer[] intervaloDeUltimosIpsValidos = new Integer[numeroDeRedes];
+				
+		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
+			intervaloDeUltimosIpsValidos[i] = definirIpDeInicioDasRedes()[i] + definirIpsDisponiveis();
+		}
+		return intervaloDeUltimosIpsValidos;
+	}
+	
+	
+	private Integer[] definirIpdeBroadcast() {
+		
+		Integer[] intervaloDeBroadcast = new Integer[numeroDeRedes];
+				
+		for(int i = 0; i < definirUltimoIpValido().length; i++) {
+			intervaloDeBroadcast[i] = definirUltimoIpValido()[i]+1;
+		}
+		return intervaloDeBroadcast;
+	}
+	
 	
 
 	
@@ -190,11 +221,12 @@ public class Ip {
 		System.out.println("Classe: " + definirClasse());
 		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
 		System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		System.out.println("n�mero De Redes: " + definirSubRedes());
+		System.out.println("n�mero De Redes: " + calcularSubRedes());
 		System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
-		System.out.println("Intervalo de Ips de rede: " + definirIpDasRedes());
-		
-		System.out.println();
+		System.out.println("Intervalo de Ips de sub-redes: " + Arrays.toString(definirIpDeInicioDasRedes()));
+		System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirPrimeiroIpValido()));
+		System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirUltimoIpValido()));
+		System.out.println("Intervalo de Primeiros Ips para Broadcast:  " + Arrays.toString(definirIpdeBroadcast()));
 	
 	}
 	
