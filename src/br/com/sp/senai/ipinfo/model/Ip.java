@@ -216,17 +216,22 @@ public class Ip {
 		
 		definirClasse();
 		definirMascara();
+		calcularSubRedes();
 		definirIpsDisponiveis();
+		Arrays.toString(definirIpDeInicioDasRedes());
+		Arrays.toString(definirPrimeiroIpValido());
+		Arrays.toString(definirUltimoIpValido());
+		Arrays.toString(definirIpdeBroadcast());
 		
-		System.out.println("Classe: " + definirClasse());
-		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
-		System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		System.out.println("n�mero De Redes: " + calcularSubRedes());
-		System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
-		System.out.println("Intervalo de Ips de sub-redes: " + Arrays.toString(definirIpDeInicioDasRedes()));
-		System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirPrimeiroIpValido()));
-		System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirUltimoIpValido()));
-		System.out.println("Intervalo de Primeiros Ips para Broadcast:  " + Arrays.toString(definirIpdeBroadcast()));
+		//System.out.println("Classe: " + definirClasse());
+		//System.out.println("Mascara em Bin�rio: " + mascaraBinario);
+		//System.out.println("Mascara em Decimal: " + mascaraDecimal);
+		//System.out.println("n�mero De Redes: " + calcularSubRedes());
+		//System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
+		//System.out.println("Intervalo de Ips de início de rede: " + Arrays.toString(definirIpDeInicioDasRedes()));
+		//System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirPrimeiroIpValido()));
+		//System.out.println("Intervalo de Primeiros Ips disponíveis: " + Arrays.toString(definirUltimoIpValido()));
+		//System.out.println("Intervalo de Primeiros Ips para Broadcast:  " + Arrays.toString(definirIpdeBroadcast()));
 	
 	}
 	
