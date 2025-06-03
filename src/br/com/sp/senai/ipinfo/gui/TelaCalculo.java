@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -63,7 +65,6 @@ public class TelaCalculo {
 		labelMensagemErro.setText("Tipo de entrada inválida");
 		labelMensagemErro.setVisible(false);
 		labelMensagemErro.setForeground(Color.red);
-		
 
 		container.add(textEndereco);
 		container.add(labelEndereco);
@@ -79,9 +80,18 @@ public class TelaCalculo {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
+				Ip ip = new Ip();
+				
+				String endereco = labelEndereco.getText();
+				ip.setEndereco(endereco);
+				
+				
+				
+				
+				
+				
 			}
 		});
-		
 		
 		
 		
@@ -90,6 +100,9 @@ public class TelaCalculo {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				
+				
+				
 				
 			}
 		});

@@ -1,5 +1,6 @@
 package br.com.sp.senai.ipinfo.model;
 
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -159,8 +160,8 @@ public class Ip {
 	    	return ipsDisponiveis;
 	}
 	
-	int saltoDeIps = 0;
-	public Integer[] definirIpDeInicioDasRedes(){
+		int saltoDeIps = 0;
+		public Integer[] definirIpDeInicioDasRedes(){
 		
 		int novoOctetoMascara = 255 + bitsEmprestados;
 		int saltoDeIps = novoOctetoMascara / numeroDeRedes;
@@ -209,31 +210,85 @@ public class Ip {
 		return intervaloDeBroadcast;
 	}
 	
+	private String[] iniciosDeRede(){
+		
+		String[] iniciosDeRede = new String[numeroDeRedes];
+		
+		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
+			
+			String item = definirIpDeInicioDasRedes()[i].toString();
+			iniciosDeRede[i] = item;
+			
+		}
+		return iniciosDeRede;
+	}
+	
+	private String[] primeirosEnderecosDisponiveis(){
+		
+		String[] iniciosDeRede = new String[numeroDeRedes];
+		
+		for(int i = 0; i < definirPrimeiroIpValido().length; i++) {
+			
+			String item = definirPrimeiroIpValido()[i].toString();
+			iniciosDeRede[i] = item;
+			
+		}
+		return iniciosDeRede;
+	}
+	
+	private String[] ultimosEnderecosDisponiveis(){
+		
+		String[] iniciosDeRede = new String[numeroDeRedes];
+		
+		for(int i = 0; i < definirUltimoIpValido().length; i++) {
+			
+			String item = definirUltimoIpValido()[i].toString();
+			iniciosDeRede[i] = item;
+			
+		}
+		return iniciosDeRede;
+	}
+	
+	private String[] enderecosDeBroadcast(){
+		
+		String[] iniciosDeRede = new String[numeroDeRedes];
+		
+		for(int i = 0; i < definirIpdeBroadcast().length; i++) {
+			
+			String item = definirIpdeBroadcast()[i].toString();
+			iniciosDeRede[i] = item;
+			
+		}
+		return iniciosDeRede;
+	}
+	
 	
 
 	
+	
 	public void mostrarDados() {
 		
-		definirClasse();
-		definirMascara();
-		calcularSubRedes();
-		definirIpsDisponiveis();
-		Arrays.toString(definirIpDeInicioDasRedes());
-		Arrays.toString(definirPrimeiroIpValido());
-		Arrays.toString(definirUltimoIpValido());
-		Arrays.toString(definirIpdeBroadcast());
+		String enderecoSeparado = endereco.substring(0, 9);
 		
-		//System.out.println("Classe: " + definirClasse());
-		//System.out.println("Mascara em Binï¿½rio: " + mascaraBinario);
-		//System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		//System.out.println("nï¿½mero De Redes: " + calcularSubRedes());
-		//System.out.println("Ips host disponï¿½veis por rede: " + definirIpsDisponiveis());
-		//System.out.println("Intervalo de Ips de inÃ­cio de rede: " + Arrays.toString(definirIpDeInicioDasRedes()));
-		//System.out.println("Intervalo de Primeiros Ips disponÃ­veis: " + Arrays.toString(definirPrimeiroIpValido()));
-		//System.out.println("Intervalo de Primeiros Ips disponÃ­veis: " + Arrays.toString(definirUltimoIpValido()));
-		//System.out.println("Intervalo de Primeiros Ips para Broadcast:  " + Arrays.toString(definirIpdeBroadcast()));
+		definirMascara();
+		System.out.println("Classe: " + definirClasse());
+		System.out.println("Mascara em Binário: " + mascaraBinario);
+		System.out.println("Mascara em Decimal: " + mascaraDecimal);
+		System.out.println("nï¿½mero De Redes: " + calcularSubRedes());
+		System.out.println("Ips host disponíveis por rede: " + definirIpsDisponiveis());
+		
+		for (int i = 0; i < numeroDeRedes; i++) {
+			
+			System.out.println("================================================");
+			System.out.println("Rede" + i + ":");
+			System.out.println("Início Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
+			System.out.println("Intervalo de host disponíveis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "----" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
+			System.out.println("Endereço de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
+			System.out.println("===================================================");
+		}
 	
 	}
+	
 	
 }
 
