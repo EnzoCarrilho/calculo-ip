@@ -78,7 +78,7 @@ public class Ip {
 	StringBuilder novaMascaraBinario = null;
 	
 	
-	private void definirMascara() {
+	public void definirMascara() {
 	
 		// separando o cidr do endere�o ip
 		String[] separador = endereco.split("/");
@@ -161,7 +161,7 @@ public class Ip {
 	}
 	
 		int saltoDeIps = 0;
-		public Integer[] definirIpDeInicioDasRedes(){
+		public Integer[] calcularEnderecoDeInicioDasRedes(){
 		
 		int novoOctetoMascara = 255 + bitsEmprestados;
 		int saltoDeIps = novoOctetoMascara / numeroDeRedes;
@@ -178,45 +178,48 @@ public class Ip {
 	}
 	
 	
-	private Integer[] definirPrimeiroIpValido() {
+	private Integer[] calcularPrimeirosIpsValidos() {
 		
 		Integer[] intervaloDePrimeirosIpsValidos = new Integer[numeroDeRedes];
 				
-		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
-			intervaloDePrimeirosIpsValidos[i] = definirIpDeInicioDasRedes()[i]+1;
+		for(int i = 0; i < calcularEnderecoDeInicioDasRedes().length; i++) {
+			intervaloDePrimeirosIpsValidos[i] = calcularEnderecoDeInicioDasRedes()[i]+1;
 		}
 		return intervaloDePrimeirosIpsValidos;
 	}
 	
 	
-	private Integer[] definirUltimoIpValido() {
+	private Integer[] calcularUltimosIpsValidos() {
 		
 		Integer[] intervaloDeUltimosIpsValidos = new Integer[numeroDeRedes];
 				
-		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
-			intervaloDeUltimosIpsValidos[i] = definirIpDeInicioDasRedes()[i] + definirIpsDisponiveis();
+		for(int i = 0; i < calcularEnderecoDeInicioDasRedes().length; i++) {
+			intervaloDeUltimosIpsValidos[i] = calcularEnderecoDeInicioDasRedes()[i] + definirIpsDisponiveis();
 		}
 		return intervaloDeUltimosIpsValidos;
 	}
 	
 	
-	private Integer[] definirIpdeBroadcast() {
+	private Integer[] calcularIpdeBroadcast() {
 		
 		Integer[] intervaloDeBroadcast = new Integer[numeroDeRedes];
 				
-		for(int i = 0; i < definirUltimoIpValido().length; i++) {
-			intervaloDeBroadcast[i] = definirUltimoIpValido()[i]+1;
+		for(int i = 0; i < calcularUltimosIpsValidos().length; i++) {
+			intervaloDeBroadcast[i] = calcularUltimosIpsValidos()[i]+1;
 		}
 		return intervaloDeBroadcast;
 	}
+	
+	
+	
 	
 	private String[] iniciosDeRede(){
 		
 		String[] iniciosDeRede = new String[numeroDeRedes];
 		
-		for(int i = 0; i < definirIpDeInicioDasRedes().length; i++) {
+		for(int i = 0; i < calcularEnderecoDeInicioDasRedes().length; i++) {
 			
-			String item = definirIpDeInicioDasRedes()[i].toString();
+			String item = calcularEnderecoDeInicioDasRedes()[i].toString();
 			iniciosDeRede[i] = item;
 			
 		}
@@ -227,9 +230,9 @@ public class Ip {
 		
 		String[] iniciosDeRede = new String[numeroDeRedes];
 		
-		for(int i = 0; i < definirPrimeiroIpValido().length; i++) {
+		for(int i = 0; i < calcularPrimeirosIpsValidos().length; i++) {
 			
-			String item = definirPrimeiroIpValido()[i].toString();
+			String item = calcularPrimeirosIpsValidos()[i].toString();
 			iniciosDeRede[i] = item;
 			
 		}
@@ -240,9 +243,9 @@ public class Ip {
 		
 		String[] iniciosDeRede = new String[numeroDeRedes];
 		
-		for(int i = 0; i < definirUltimoIpValido().length; i++) {
+		for(int i = 0; i < calcularUltimosIpsValidos().length; i++) {
 			
-			String item = definirUltimoIpValido()[i].toString();
+			String item = calcularUltimosIpsValidos()[i].toString();
 			iniciosDeRede[i] = item;
 			
 		}
@@ -253,9 +256,9 @@ public class Ip {
 		
 		String[] iniciosDeRede = new String[numeroDeRedes];
 		
-		for(int i = 0; i < definirIpdeBroadcast().length; i++) {
+		for(int i = 0; i < calcularIpdeBroadcast().length; i++) {
 			
-			String item = definirIpdeBroadcast()[i].toString();
+			String item = calcularIpdeBroadcast()[i].toString();
 			iniciosDeRede[i] = item;
 			
 		}
@@ -265,27 +268,45 @@ public class Ip {
 	
 
 	
-	
-	public void mostrarDados() {
+	public java.util.List<String> mostrarDados() {
 		
 		String enderecoSeparado = endereco.substring(0, 9);
 		
-		definirMascara();
-		System.out.println("Classe: " + definirClasse());
-		System.out.println("Mascara em Bin�rio: " + mascaraBinario);
-		System.out.println("Mascara em Decimal: " + mascaraDecimal);
-		System.out.println("n�mero De Redes: " + calcularSubRedes());
-		System.out.println("Ips host dispon�veis por rede: " + definirIpsDisponiveis());
+		java.util.List<String> resultados = new ArrayList<String>();
 		
-		for (int i = 0; i < numeroDeRedes; i++) {
+		resultados.add("Endereço: " + endereco);
+		resultados.add("Classe: " + definirClasse());
+		
+		if(classe == "D" || classe == "E") {
+			resultados.add("Máscara Decimal: ");
+			resultados.add("Máscara Binário: ");
+			resultados.add("Número de Redes: ");
+			resultados.add("Ips host disponíveis por rede: ");
 			
-			System.out.println("================================================");
-			System.out.println("Rede" + i + ":");
-			System.out.println("In�cio Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
-			System.out.println("Intervalo de host dispon�veis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "----" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
-			System.out.println("Endere�o de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
-			System.out.println("===================================================");
+		}else {
+			resultados.add("Máscara Binário: " + mascaraBinario);
+			resultados.add("Máscara Decimal: " + mascaraDecimal);
+			resultados.add("Número de Redes: " + calcularSubRedes());
+			resultados.add("Ips host disponíveis por rede: " + definirIpsDisponiveis());
 		}
+		
+		if(cidr > 24 && cidr < 31) {
+		
+			for (int i = 0; i < numeroDeRedes; i++) {
+				
+				resultados.add("===================================================");
+				resultados.add("Rede" + i + ":");
+				resultados.add("In�cio Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
+				resultados.add("Intervalo de host dispon�veis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "--" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
+				resultados.add("Endere�o de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
+				resultados.add("===================================================");
+			}
+		}
+		
+		return resultados;
+		
+		
+		
 	
 	}
 	

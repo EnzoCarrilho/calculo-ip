@@ -8,9 +8,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import br.com.sp.senai.ipinfo.model.Ip;
@@ -21,8 +24,10 @@ public class TelaCalculo {
 	private JLabel labelEndereco;
 	private JButton buttonCalcular;
 	private JButton buttonLimpar;
-	private JLabel labelResultado;
+
 	private JLabel labelMensagemErro;
+	private JList<String> listResultado;
+	private JScrollPane scrollPane;
 	
 	
 	public void criarTelaConversor() {
@@ -51,14 +56,10 @@ public class TelaCalculo {
 		buttonLimpar.setText("Limpar");
 		buttonLimpar.setBounds(250, 90, 220, 30);
 		
-		labelResultado = new JLabel();
-		labelResultado.setBounds(150, 130, 230, 40);
-		//criando a fonte
-		Font fonteResultado = labelResultado.getFont();
-		//definindo a estilização e tamanho da fonte
-		Font fonteNegrito = new Font(fonteResultado.getFontName(), Font.BOLD, 25);
-		//atribuindo a fonte ao label resultado
-		labelResultado.setFont(fonteNegrito);
+		listResultado = new JList<String>();
+		
+		scrollPane = new JScrollPane(listResultado);
+		scrollPane.setBounds(20, 130, 450, 350);
 		
 		labelMensagemErro = new JLabel();
 		labelMensagemErro.setBounds(170, 190, 200, 40);
@@ -70,7 +71,7 @@ public class TelaCalculo {
 		container.add(labelEndereco);
 		container.add(buttonCalcular);
 		container.add(buttonLimpar);
-		container.add(labelResultado);
+		container.add(scrollPane);
 		container.add(labelMensagemErro);
 		
 		
@@ -80,11 +81,32 @@ public class TelaCalculo {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				Ip ip = new Ip();
-				
-				String endereco = labelEndereco.getText();
-				ip.setEndereco(endereco);
-				
+				try {
+					
+					labelMensagemErro.setVisible(false);
+					scrollPane.setVisible(true);
+					
+
+					String endereco = labelEndereco.getText();
+					
+					Ip ip = new Ip();
+					ip.setEndereco(endereco);
+					ip.definirMascara();
+					
+					DefaultListModel<String> modelo = new DefaultListModel<>();
+					List<String> ipResultados = ip.mostrarDados();
+					
+					 for (String elemento : ipResultados) {
+					       modelo.addElement(elemento);
+					   }
+					 
+					 listResultado.setModel(modelo);
+					
+					
+					
+					
+					
+				}catch(ArrayIndexOutOfBoundsException exception){}
 				
 				
 				
