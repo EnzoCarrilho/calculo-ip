@@ -25,8 +25,6 @@ public class TelaCalculo {
 	private JLabel labelEndereco;
 	private JButton buttonCalcular;
 	private JButton buttonLimpar;
-
-	private JLabel labelMensagemErro;
 	private JList<String> listResultado;
 	private JScrollPane scrollPane;
 	
@@ -34,7 +32,7 @@ public class TelaCalculo {
 	public void criarTelaConversor() {
 		
 		JFrame tela = new JFrame();
-		tela.setTitle("C√°lculo de IP");
+		tela.setTitle("C·lculo de IP");
 		tela.setSize(500, 600);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setResizable(false);
@@ -44,7 +42,7 @@ public class TelaCalculo {
 		
 		labelEndereco = new JLabel();
 		labelEndereco.setBounds(20, 20, 200, 30);
-		labelEndereco.setText("Insira o endere√ßo Ip: ");
+		labelEndereco.setText("Insira o endereÁo Ip: ");
 		
 		textEndereco = new JTextField();
 		textEndereco.setBounds(20, 50, 450, 30);
@@ -66,7 +64,7 @@ public class TelaCalculo {
 		labelMensagemErro.setEditable(false); 
 		labelMensagemErro.setLineWrap(true);
 		labelMensagemErro.setBounds(60, 190, 370, 240);
-		labelMensagemErro.setText("Entrada Inv√°lida.\nInsira um endere√ßo v√°lido.");
+		labelMensagemErro.setText("Entrada Inv·lida.\nInsira um endereÁo v·lido.");
 		labelMensagemErro.setVisible(false);
 		labelMensagemErro.setForeground(Color.red);
 		Font fonteErro = labelMensagemErro.getFont();
@@ -104,8 +102,8 @@ public class TelaCalculo {
 					DefaultListModel<String> modelo = new DefaultListModel<>();
 					
 					
-					for (String bloco : ipResultados) {
-						String[] linhas = bloco.split("\n");
+					for (String lista : ipResultados) {
+						String[] linhas = lista.split("\n");
 						
 						for (String linha : linhas) {
 							modelo.addElement(linha);

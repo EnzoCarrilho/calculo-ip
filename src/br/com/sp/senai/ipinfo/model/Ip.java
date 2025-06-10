@@ -267,16 +267,16 @@ public class Ip {
 		resultados.add("Classe: " + definirClasse());
 		
 		if(classe == "D" || classe == "E") {
-			resultados.add("MÃ¡scara Decimal: ");
-			resultados.add("MÃ¡scara BinÃ¡rio: ");
-			resultados.add("NÃºmero de Redes: ");
-			resultados.add("Ips host disponÃ­veis por rede: ");
+			resultados.add("Máscara Decimal: ");
+			resultados.add("Máscara BinÃ¡rio: ");
+			resultados.add("Número de Redes: ");
+			resultados.add("Ips host disponíveis por rede: ");
 			
 		}else {
-			resultados.add("MÃ¡scara BinÃ¡rio: " + getMascaraBinario());
-			resultados.add("MÃ¡scara Decimal: " + getMascaraDecimal());
-			resultados.add("NÃºmero de Redes: " + calcularSubRedes());
-			resultados.add("Ips host disponÃ­veis por rede: " + definirIpsDisponiveis());
+			resultados.add("Máscara Binário: " + getMascaraBinario());
+			resultados.add("Máscara Decimal: " + getMascaraDecimal());
+			resultados.add("Número de Redes: " + calcularSubRedes());
+			resultados.add("Ips host disponíveis por rede: " + definirIpsDisponiveis());
 		}
 		
 		if(cidr > 24 && cidr < 31) {
@@ -285,9 +285,9 @@ public class Ip {
 				
 				resultados.add("===================================================");
 				resultados.add("Rede" + i + ":");
-				resultados.add("InÃ­cio Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
-				resultados.add("Intervalo de host disponÃ­veis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "--" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
-				resultados.add("EndereÃ§o de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
+				resultados.add("Início Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
+				resultados.add("Intervalo de host disponíveis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "--" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
+				resultados.add("Endereço de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
 				resultados.add("===================================================");
 			}
 		}
