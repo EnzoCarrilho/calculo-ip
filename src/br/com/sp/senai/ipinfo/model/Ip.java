@@ -14,81 +14,30 @@ public class Ip {
 	private String classe;
 	private int cidr;
 	
-	
-	public String getEndereco() {
-		return endereco;
-	}
-	
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
 	
-	public String getMascaraDecimal() {
-		return mascaraDecimal;
-	}
-	
-	public void setMascaraDecimal(String mascaraDecimal) {
-		this.mascaraDecimal = mascaraDecimal;
-	}
-	
-	public String getMascaraBinario() {
-		return mascaraBinario;
-	}
-	
-	public void setMascaraBinario(String mascaraBinario) {
-		this.mascaraBinario = mascaraBinario;
-	}
-	
-	public String getClasse() {
-		return classe;
-	}
-	public void setClasse(String classe) {
-		this.classe = classe;
-	}
-	
-	
-	private String definirClasse(){
+	String[] octetos;
+	public void separarEndereco() {
 		
-		String inicioEndereco = endereco.substring(0, 3);
-		int inicioEnderecoint = Integer.parseInt(inicioEndereco);
-		
-		if( inicioEnderecoint  <= 127) {
-			
-			setClasse("A");
-			
-		}else if(inicioEnderecoint  > 127 && inicioEnderecoint <= 191){
-			
-			setClasse("B");
-			
-		}else if(inicioEnderecoint > 191 && inicioEnderecoint  <= 223){
-		
-			setClasse("C");
-			
-		}else if(inicioEnderecoint  > 223 && inicioEnderecoint <= 239) {
-			
-			setClasse("D");
-		}else {
-			
-			setClasse("E");
-		}
-		
-		return classe;
-	}
-	
-	StringBuilder novaMascaraBinario = null;
-	
-	
-	public void definirMascara() {
-	
-		// separando o cidr do endere�o ip
-		String[] separador = endereco.split("/");
-						
-		String stringcidr = separador[1];
-		cidr = Integer.parseInt(stringcidr);
-				
-		// Criando um StringBuilder com 32 zeros
-		novaMascaraBinario = new StringBuilder("00000000000000000000000000000000");
+		int cidr;
 
+		String[] splitEndereco = endereco.split("/");
+		cidr = Integer.parseInt(splitEndereco[1]);	
+		this.cidr = cidr;
+		
+		
+		octetos = splitEndereco[0].split("\\.");
+		if (octetos.length != 4) {
+			octetos[0] = "Formato de IP invalido.";
+		}
+
+	}
+		
+	public String getMascaraBinario() {
+	
+		StringBuilder novaMascaraBinario = new StringBuilder("00000000000000000000000000000000");
 		// Preenchendo os bits com '1' de acordo com o valor do CIDR			
 		for (int i = 0; i < cidr; i++) {
 			novaMascaraBinario.setCharAt(i, '1');
@@ -99,16 +48,58 @@ public class Ip {
 		String terceiroOcteto = novaMascaraBinario.substring(16, 24);
 		String quartoOcteto = novaMascaraBinario.substring(24, 32);
 		
-		setMascaraBinario(primeiroOcteto + '.' + segundoOcteto + '.' + terceiroOcteto + '.' + quartoOcteto);
+		mascaraBinario = primeiroOcteto + '.' + segundoOcteto + '.' + terceiroOcteto + '.' + quartoOcteto;
+		
+		return mascaraBinario;
+	}
+	
+	public String getMascaraDecimal() {
+		
+		String[] separarMascara = getMascaraBinario().split("\\.");
+		
+		String primeiroOcteto = separarMascara[0];
+		String segundoOcteto = separarMascara[1];
+		String terceiroOcteto = separarMascara[2];
+		String quartoOcteto = separarMascara[3];
+
 		
 		int primeiroDecimal = Integer.parseInt(primeiroOcteto, 2);
 		int segundoDecimal = Integer.parseInt(segundoOcteto, 2);
 		int terceiroDecimal = Integer.parseInt(terceiroOcteto, 2);
 		int quartoDecimal = Integer.parseInt(quartoOcteto, 2);
 		
-		setMascaraDecimal(primeiroDecimal + "." + segundoDecimal + "." + terceiroDecimal + "." + quartoDecimal);
-		
+		mascaraDecimal = primeiroDecimal + "." + segundoDecimal + "." + terceiroDecimal + "." + quartoDecimal;
+		return mascaraDecimal;
 	}
+	
+	
+	private String definirClasse(){
+		
+		int primeiroOcteto = Integer.parseInt(octetos[0]);
+		
+		if( primeiroOcteto  <= 127) {
+			
+			classe = "A";
+			
+		}else if(primeiroOcteto  > 127 && primeiroOcteto <= 191){
+			
+			classe = "B";
+			
+		}else if(primeiroOcteto > 191 && primeiroOcteto  <= 223){
+		
+			classe = "C";
+			
+		}else if(primeiroOcteto  > 223 && primeiroOcteto <= 239) {
+			
+			classe = "D";
+		}else {
+			
+			classe = "E";
+		}
+		
+		return classe;
+	}
+	
 	
 	
 	int numeroDeRedes = 0;
@@ -147,11 +138,11 @@ public class Ip {
 		int bitsZero = 0;
 		int ipsDisponiveis = 0;
 		
-		// Percorrendo a Mascara e, Binário
-		for(int i = 0; i < novaMascaraBinario.length(); i++) {
+		// Percorrendo a Mascara em Binário
+		for(int i = 0; i < getMascaraBinario().length(); i++) {
 			
 			// Contando os Bits zero
-			if(novaMascaraBinario.charAt(i) == '0' ) {
+			if(getMascaraBinario().charAt(i) == '0' ) {
 				bitsZero ++;
 			}
 		}
@@ -266,8 +257,6 @@ public class Ip {
 	}
 	
 	
-
-	
 	public java.util.List<String> mostrarDados() {
 		
 		String enderecoSeparado = endereco.substring(0, 9);
@@ -284,8 +273,8 @@ public class Ip {
 			resultados.add("Ips host disponíveis por rede: ");
 			
 		}else {
-			resultados.add("Máscara Binário: " + mascaraBinario);
-			resultados.add("Máscara Decimal: " + mascaraDecimal);
+			resultados.add("Máscara Binário: " + getMascaraBinario());
+			resultados.add("Máscara Decimal: " + getMascaraDecimal());
 			resultados.add("Número de Redes: " + calcularSubRedes());
 			resultados.add("Ips host disponíveis por rede: " + definirIpsDisponiveis());
 		}
@@ -296,20 +285,16 @@ public class Ip {
 				
 				resultados.add("===================================================");
 				resultados.add("Rede" + i + ":");
-				resultados.add("In�cio Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
-				resultados.add("Intervalo de host dispon�veis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "--" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
-				resultados.add("Endere�o de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
+				resultados.add("Início Da Rede: " + enderecoSeparado + "." + iniciosDeRede()[i]);
+				resultados.add("Intervalo de host disponíveis: " + enderecoSeparado + "." + primeirosEnderecosDisponiveis()[i] + "--" + enderecoSeparado + "." + ultimosEnderecosDisponiveis()[i]);
+				resultados.add("Endereço de Broadcast: " + enderecoSeparado + "." + enderecosDeBroadcast()[i]);
 				resultados.add("===================================================");
 			}
 		}
 		
 		return resultados;
 		
-		
-		
-	
 	}
 	
 	
 }
-

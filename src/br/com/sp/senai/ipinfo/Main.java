@@ -16,7 +16,9 @@ public class Main {
 		//Ip ip = new Ip();
 		//System.out.println("Insira o endere�o ip");
 		//ip.setEndereco(reader.next());
+		//ip.separaIP();
 		//ip.mostrarDados();
+		
 		//reader.close(); 
 	}
 

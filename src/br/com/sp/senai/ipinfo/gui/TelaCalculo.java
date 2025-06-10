@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import br.com.sp.senai.ipinfo.model.Ip;
@@ -33,7 +34,7 @@ public class TelaCalculo {
 	public void criarTelaConversor() {
 		
 		JFrame tela = new JFrame();
-		tela.setTitle("Conversor de Temperatura");
+		tela.setTitle("Cálculo de IP");
 		tela.setSize(500, 600);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setResizable(false);
@@ -59,13 +60,19 @@ public class TelaCalculo {
 		listResultado = new JList<String>();
 		
 		scrollPane = new JScrollPane(listResultado);
-		scrollPane.setBounds(20, 130, 450, 350);
+		scrollPane.setBounds(20, 130, 450, 400);
 		
-		labelMensagemErro = new JLabel();
-		labelMensagemErro.setBounds(170, 190, 200, 40);
-		labelMensagemErro.setText("Tipo de entrada inválida");
+		final JTextArea labelMensagemErro = new JTextArea(); 
+		labelMensagemErro.setEditable(false); 
+		labelMensagemErro.setLineWrap(true);
+		labelMensagemErro.setBounds(60, 190, 370, 240);
+		labelMensagemErro.setText("Entrada Inválida.\nInsira um endereço válido.");
 		labelMensagemErro.setVisible(false);
 		labelMensagemErro.setForeground(Color.red);
+		Font fonteErro = labelMensagemErro.getFont();
+		Font fonteNegrito = new Font(fonteErro.getFontName(), Font.BOLD, 25);
+		labelMensagemErro.setFont(fonteNegrito);
+		
 
 		container.add(textEndereco);
 		container.add(labelEndereco);
@@ -85,32 +92,43 @@ public class TelaCalculo {
 					
 					labelMensagemErro.setVisible(false);
 					scrollPane.setVisible(true);
+					listResultado.setVisible(true);
 					
-
-					String endereco = labelEndereco.getText();
+					String endereco = textEndereco.getText();
 					
 					Ip ip = new Ip();
 					ip.setEndereco(endereco);
-					ip.definirMascara();
+					ip.separarEndereco();
 					
-					DefaultListModel<String> modelo = new DefaultListModel<>();
 					List<String> ipResultados = ip.mostrarDados();
+					DefaultListModel<String> modelo = new DefaultListModel<>();
 					
-					 for (String elemento : ipResultados) {
-					       modelo.addElement(elemento);
-					   }
+					
+					for (String bloco : ipResultados) {
+						String[] linhas = bloco.split("\n");
+						
+						for (String linha : linhas) {
+							modelo.addElement(linha);
+						}
+					}
+					
 					 
 					 listResultado.setModel(modelo);
 					
 					
-					
-					
-					
-				}catch(ArrayIndexOutOfBoundsException exception){}
+						
+				}catch(ArrayIndexOutOfBoundsException exception){
 				
+				String[] nullString = new String[0];
+				listResultado.setListData(nullString);
 				
+				textEndereco.setText(null);
 				
+				listResultado.setVisible(false);
+				scrollPane.setVisible(false);
+				labelMensagemErro.setVisible(true);
 				
+				}
 				
 			}
 		});
@@ -123,7 +141,16 @@ public class TelaCalculo {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
+				labelMensagemErro.setVisible(false);
+				listResultado.setVisible(true);
+				scrollPane.setVisible(true);
 				
+				String[] nullString = new String[0];
+				listResultado.setListData(nullString);
+				
+				textEndereco.setText(null);
+				
+				textEndereco.requestFocus();
 				
 				
 			}
